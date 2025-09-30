@@ -5,6 +5,7 @@ labcraft/__init__.py
 labcraft/cli.py
 labcraft/merger.py
 labcraft/scaffolder.py
+labcraft/templates.py
 labcraft/utils.py
 labcraft.egg-info/PKG-INFO
 labcraft.egg-info/SOURCES.txt
