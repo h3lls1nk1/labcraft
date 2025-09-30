@@ -1,0 +1,15 @@
+name: default
+version: 0.1
+description: 'Estructura por defecto de directorios'
+files:
+  - notes/info.txt
+  - enum/
+  - scans/
+  - scripts/
+  - loot/
+  - reports/
+  - extra/
+variables:
+  host: 'unknown'
+  author: ''
+  license: 'MIT'
