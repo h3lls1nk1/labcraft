@@ -32,7 +32,12 @@ def init(path, template, var, force):
     """Inicializa estructura básica de laboratorio"""
     root = Path(path)
 
-    ok = scaffolder.init_project(root, template, force, vars)
+    ok = scaffolder.init_project(
+        root=root, 
+        template=template, 
+        force=force, 
+        template_vars=var
+    )
 
     if ok:
         click.echo('Proyeto creado')

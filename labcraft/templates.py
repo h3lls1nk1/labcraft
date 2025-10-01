@@ -6,6 +6,7 @@ import yaml
 import datetime
 from importlib import resources
 from jinja2 import Template, Environment, meta
+from typing import Tuple
 
 XDG_CONFIG_HOME = Path(os.environ.get('XDG_CONFIG_HOME', Path.home() / '.config'))
 USER_TEMPLATES_DIR = XDG_CONFIG_HOME / 'labcraft' / 'templates'
@@ -159,3 +160,35 @@ def write_template_file(raw_bytes: bytes, target: Path, context: dict, env: Envi
             # treat as text, but do NOT render unless user requested; keep exact content
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(raw_bytes.decode('utf-8'), encoding='utf-8')
+
+def read_template_bytes(template_source, rel_path: str) -> Tuple[bytes, bool]:
+    """
+    Lee y devuelve el contenido (bytes) del archivo rel_path dentro de template_source.
+    Devuelve (bytes, is_traversable) donde is_traversable indica si el source era Traversable.
+    Lance FileNotFoundError si no existe.
+    template_source puede ser:
+      - importlib.resources.Traversable  (has .joinpath(), .read_bytes())
+      - pathlib.Path
+    rel_path usa '/' como separador (ej: 'notes/info.md.j2').
+    """
+    # 1) Si template_source parece Traversable (importlib.resources)
+    try:
+        # many Traversable implementations have joinpath() or joinpath-like behaviour
+        candidate = template_source.joinpath(rel_path)
+        # read_bytes en Traversable
+        data = candidate.read_bytes()
+        return data, True
+    except Exception:
+        pass
+
+    # 2) fallback Path
+    candidate_path = Path(template_source) / rel_path
+    if candidate_path.exists():
+        return candidate_path.read_bytes(), False
+
+    # 3) si no existe
+    raise FileNotFoundError(f"Plantilla no contiene el archivo: {rel_path}")
+
+def read_template_text(template_source, rel_path: str, encoding='utf-8') -> Tuple[str, bool]:
+    b, trav = read_template_bytes(template_source, rel_path)
+    return b.decode(encoding), trav

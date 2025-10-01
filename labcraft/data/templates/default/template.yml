@@ -1,0 +1,18 @@
+name: default
+version: 0.1
+description: "Estructura por defecto de directorios"
+files:
+  - .gitignore.j2
+  - notes/info.md.j2
+  - enum/checklist.txt.j2
+  - scans/README.txt
+  - scripts/README.txt
+  - loot/README.txt
+  - reports/summary.md.j2
+  - extra/README.txt
+  - tests/README.txt
+variables:
+  project_name: "cyberlab"
+  host: "127.0.0.1"
+  author: "Labcraft"
+  license: "MIT"
